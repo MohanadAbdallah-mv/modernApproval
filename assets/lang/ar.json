@@ -260,6 +260,7 @@
   "item_number": "رقم الصنف",
   "serial_number": "الرقم",
   "filter_by_store_name": "التصفية حسب اسم المخزن",
+  "filter_by_vacation_type_name": "التصفية حسب نوع الاجازة",
   "clearFilters": "مسح التصفية",
   "resultsFound": "يوجد {{resultLength}} نتائج متاحة",
   "confirmApproval": "تأكيد الموافقة",
@@ -301,4 +302,13 @@
   "inventoryIssueDetails": "تفاصيل صادر انتاج",
   "inventoryIssueApproval": "اعتماد صادر مخازن",
   "productionInboundApproval": "اعتماد وارد انتاج"
+  "leaveAndAbsenceApproval": "اعتماد الاجازات و الانقطاعات",
+  "request_details": "تفاصيل الطلب",
+  "request_info": "تفاصيل الموافقة",
+  "emp_name": "اسم الموظق",
+  "emp_code": "كود الموظف",
+  "desc_vacation": "وصف الاجازة",
+  "from": "من",
+  "to": "الي",
+  "trnsDate": "تاريخ الحركة"
 }
