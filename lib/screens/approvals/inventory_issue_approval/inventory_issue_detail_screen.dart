@@ -889,7 +889,7 @@ class _InventoryIssueDetailScreenState
       print(
         "❌ CRITICAL ERROR: Missing 'prev_ser' or 'last_level' in the initial ProductionOutbound object.",
       );
-      print("❌ Make sure 'GET_pro_out_AUTH' API returns these values!");
+      print("❌ Make sure 'GET_inv_issue_AUTH' API returns these values!");
       _showErrorDialog(
         "بيانات الطلب الأساسية غير مكتملة (prev_ser, last_level). لا يمكن المتابعة.",
       );
@@ -916,7 +916,7 @@ class _InventoryIssueDetailScreenState
         authPk1: authPk1,
         authPk2: authPk2,
         actualStatus: actualStatus,
-        approvalType: "pro_out",
+        approvalType: "inv_issue",
       );
 
       final int trnsStatus = s1.trnsStatus;
@@ -937,7 +937,7 @@ class _InventoryIssueDetailScreenState
           userId: userId,
           authPk1: authPk1,
           authPk2: authPk2,
-          approvalType: "pro_out",
+          approvalType: "inv_issue",
         );
       } else {
         print("--- ⏩ Skipping Stage 3 (Condition Not Met) ---");
@@ -953,7 +953,7 @@ class _InventoryIssueDetailScreenState
         "auth_pk2": authPk2,
         "trns_status": trnsStatus,
       };
-      await _apiService.stage4_updateStatus(stage4Body, "pro_out");
+      await _apiService.stage4_updateStatus(stage4Body, "inv_issue");
 
       final Map<String, dynamic> stage5Body = {
         "auth_pk1": authPk1,
@@ -961,7 +961,7 @@ class _InventoryIssueDetailScreenState
         "prev_ser": prevSerOriginal,
         "prev_level": prevLevelS1,
       };
-      await _apiService.stage5_deleteStatus(stage5Body, "pro_out");
+      await _apiService.stage5_deleteStatus(stage5Body, "inv_issue");
 
       print(
         "--- ℹ️ Checking Stage 6 Condition: trnsStatus ($trnsStatus) == 0 || trnsStatus ($trnsStatus) == -1",
@@ -979,7 +979,7 @@ class _InventoryIssueDetailScreenState
           "auth_pk4": s1.authPk4,
           "auth_pk5": s1.authPk5,
         };
-        await _apiService.stage6_postFinalStatus(stage6Body, "pro_out");
+        await _apiService.stage6_postFinalStatus(stage6Body, "inv_issue");
       } else {
         print("--- ⏩ Skipping Stage 6 (Condition Not Met) ---");
       }
