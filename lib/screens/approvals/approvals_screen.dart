@@ -64,6 +64,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
               _fetchAndSetProductionInboundCount();
               _fetchAndSetInventoryIssueCount();
               _fetchAndSetLeaveAndAbsenceCount();
+              _fetchAndSetMissionCount();
+              _fetchAndSetExitCount();
             });
           }
         })
@@ -83,6 +85,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
     await _fetchAndSetProductionInboundCount();
     await _fetchAndSetInventoryIssueCount();
     await _fetchAndSetLeaveAndAbsenceCount();
+    await _fetchAndSetMissionCount();
+    await _fetchAndSetExitCount();
   }
 
   Future<void> _fetchAndSetPurchaseRequestCount() async {
@@ -248,8 +252,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
   }
 
   Future<void> _fetchAndSetInventoryIssueCount() async {
-
-  if (_selectedPasswordGroup == null) return;
+    if (_selectedPasswordGroup == null) return;
     if (!mounted) return;
 
     setState(() {
@@ -257,16 +260,16 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
     });
 
     try {
-final requests = await _apiService.getInventoryIssue(  userId: widget.user.usersCode,
+      final requests = await _apiService.getInventoryIssue(
+        userId: widget.user.usersCode,
         roleId: widget.user.roleCode!,
         passwordNumber: _selectedPasswordGroup!.passwordNumber,
-      
       );
-            _approvalCounts[104] = requests.length;
+      _approvalCounts[104] = requests.length;
     } catch (e) {
       print("Error fetching Inventory issue count: $e");
       _approvalCounts[104] = 0;
- } finally {
+    } finally {
       if (mounted) {
         setState(() {
           _isCountLoading = false;
@@ -274,8 +277,8 @@ final requests = await _apiService.getInventoryIssue(  userId: widget.user.users
       }
     }
   }
-  Future<void> _fetchAndSetLeaveAndAbsenceCount() async {
 
+  Future<void> _fetchAndSetLeaveAndAbsenceCount() async {
     if (_selectedPasswordGroup == null) return;
     if (!mounted) return;
 
@@ -302,6 +305,61 @@ final requests = await _apiService.getInventoryIssue(  userId: widget.user.users
     }
   }
 
+  //todo change this to mission
+  Future<void> _fetchAndSetMissionCount() async {
+    if (_selectedPasswordGroup == null) return;
+    if (!mounted) return;
+
+    setState(() {
+      _isCountLoading = true;
+    });
+
+    try {
+      final requests = await _apiService.getLeaveAndAbsence(
+        userId: widget.user.usersCode,
+        roleId: widget.user.roleCode!,
+        passwordNumber: _selectedPasswordGroup!.passwordNumber,
+      );
+      _approvalCounts[109] = requests.length;
+    } catch (e) {
+      print("Error fetching Leave and Absence count: $e");
+      _approvalCounts[109] = 0;
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isCountLoading = false;
+        });
+      }
+    }
+  }
+
+  //todo change this to exit
+  Future<void> _fetchAndSetExitCount() async {
+    if (_selectedPasswordGroup == null) return;
+    if (!mounted) return;
+
+    setState(() {
+      _isCountLoading = true;
+    });
+
+    try {
+      final requests = await _apiService.getLeaveAndAbsence(
+        userId: widget.user.usersCode,
+        roleId: widget.user.roleCode!,
+        passwordNumber: _selectedPasswordGroup!.passwordNumber,
+      );
+      _approvalCounts[109] = requests.length;
+    } catch (e) {
+      print("Error fetching Leave and Absence count: $e");
+      _approvalCounts[109] = 0;
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isCountLoading = false;
+        });
+      }
+    }
+  }
 
   Future<List<FormReportItem>> _fetchAndProcessApprovals() async {
     final items = await _apiService.getFormsAndReports(widget.user.usersCode);
@@ -529,7 +587,7 @@ final requests = await _apiService.getInventoryIssue(  userId: widget.user.users
                         item.pageId == 111 ||
                         item.pageId == 105 ||
                         item.pageId == 106 ||
-                     item.pageId == 109 ||
+                        item.pageId == 109 ||
                         item.pageId == 104) &&
                     _isCountLoading,
               );
@@ -668,6 +726,8 @@ final requests = await _apiService.getInventoryIssue(  userId: widget.user.users
               _fetchAndSetProductionInboundCount();
               _fetchAndSetInventoryIssueCount();
               _fetchAndSetLeaveAndAbsenceCount();
+              _fetchAndSetMissionCount();
+              _fetchAndSetExitCount();
             });
           },
           offset: const Offset(0, 48),
