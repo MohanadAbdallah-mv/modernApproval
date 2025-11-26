@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:modernapproval/models/password_group_model.dart';
+import 'package:modernapproval/screens/approvals/exit_permission_approval/exit_permission_approval.dart';
 import 'package:modernapproval/screens/approvals/inventory_issue_approval/inventory_issue_approval_screen.dart';
 import 'package:modernapproval/screens/approvals/leave_and_absence_approval/leave_and_absence_approval_screen.dart';
 import 'package:modernapproval/screens/approvals/production_inbound_approval/production_inbound_approval_screen.dart';
@@ -527,7 +528,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
           context,
           MaterialPageRoute(
             builder:
-                (context) => PurchasePayApprovalScreen(
+                (context) => ExitPermissionApproval(
                   user: widget.user,
                   selectedPasswordNumber:
                       _selectedPasswordGroup!.passwordNumber,

@@ -117,4 +117,9 @@ class ExitPermission {
   String get formattedExitDate {
     return formatDate(exitDate);
   }
+
+  //todo subtract the difference between enter and exit date
+  //   String get formattedPeriod {
+  //     return;
+  //   }
 }
