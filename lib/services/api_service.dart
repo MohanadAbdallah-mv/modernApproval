@@ -329,14 +329,27 @@ class ApiService {
     required String authPk2,
     required int actualStatus,
     required String approvalType,
+    String? authPk3,
   }) async {
-    final queryParams = {
-      'user_id': userId.toString(),
-      'role_code': roleCode.toString(),
-      'auth_pk1': authPk1,
-      'auth_pk2': authPk2,
-      'actual_status': actualStatus.toString(),
-    };
+    var queryParams;
+    if (authPk3 == null) {
+      queryParams = {
+        'user_id': userId.toString(),
+        'role_code': roleCode.toString(),
+        'auth_pk1': authPk1,
+        'auth_pk2': authPk2,
+        'actual_status': actualStatus.toString(),
+      };
+    } else {
+      queryParams = {
+        'user_id': userId.toString(),
+        'role_code': roleCode.toString(),
+        'auth_pk1': authPk1,
+        'auth_pk2': authPk2,
+        'auth_pk3': authPk3,
+        'actual_status': actualStatus.toString(),
+      };
+    }
     Uri url;
     switch (approvalType) {
       case "pur_request":
@@ -368,6 +381,14 @@ class ApiService {
           '$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS',
         ).replace(queryParameters: queryParams);
       case "lev_abs":
+        url = Uri.parse(
+          '$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS',
+        ).replace(queryParameters: queryParams);
+      case "mission":
+        url = Uri.parse(
+          '$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS',
+        ).replace(queryParameters: queryParams);
+      case "exit":
         url = Uri.parse(
           '$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS',
         ).replace(queryParameters: queryParams);
@@ -406,6 +427,7 @@ class ApiService {
     required int userId,
     required String authPk1,
     required String authPk2,
+    String? authPk3,
     required String approvalType,
   }) async {
     Uri url;
@@ -426,15 +448,26 @@ class ApiService {
         url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_ST_ADJUST_TRNS_OUT');
       case "lev_abs":
         url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_UPDATE_VCNC_TRNS');
+      case "mission":
+        url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_UPDATE_VCNC_TRNS');
+      case "exit":
+        url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_UPDATE_VCNC_TRNS');
       default:
         //todo update this later on
         url = Uri.parse('$_baseUrl/check_last_level_update');
     }
-    final bodyMap = {
-      "user_id": userId,
-      "auth_pk1": authPk1,
-      "auth_pk2": authPk2,
-    };
+    var bodyMap;
+    if (authPk3 == null) {
+      bodyMap = {"user_id": userId, "auth_pk1": authPk1, "auth_pk2": authPk2};
+    } else {
+      bodyMap = {
+        "user_id": userId,
+        "auth_pk1": authPk1,
+        "auth_pk2": authPk2,
+        "auth_pk3": authPk3,
+      };
+    }
+
     final body = json.encode(bodyMap);
     log("Stage 3");
     log("URL : ${url.toString()}");
@@ -473,6 +506,10 @@ class ApiService {
       case "inv_issue":
         url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
       case "lev_abs":
+        url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
+      case "mission":
+        url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
+      case "exit":
         url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
       default:
         //todo update this later on
@@ -517,6 +554,10 @@ class ApiService {
         url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
       case "lev_abs":
         url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
+      case "mission":
+        url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
+      case "exit":
+        url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
       default:
         //todo update this later on
         url = Uri.parse('$_baseUrl/UPDATE_PUR_REQUEST_STATUS');
@@ -559,6 +600,10 @@ class ApiService {
       case "inv_issue":
         url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
       case "lev_abs":
+        url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
+      case "mission":
+        url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
+      case "exit":
         url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
       default:
         //todo update this later on
@@ -1350,6 +1395,90 @@ class ApiService {
       throw Exception('noInternet');
     } catch (e) {
       print('An unexpected error occurred at Inventory issue detail: $e');
+      throw Exception('serverError');
+    }
+  }
+
+  /// mission
+  Future<List<InventoryIssue>> getMission({
+    required int userId,
+    required int roleId,
+    required int passwordNumber,
+  }) async {
+    final queryParams = {
+      'user_id': userId.toString(),
+      'password_number': passwordNumber.toString(),
+      'role_id': roleId.toString(),
+    };
+    final url = Uri.parse(
+      '$_baseUrl/GET_ST_ADJUST_TRNS_OUT_AUTH',
+    ).replace(queryParameters: queryParams);
+    print('Fetching Inventory issue Requests from: $url');
+    try {
+      final response = await http.get(url).timeout(const Duration(seconds: 30));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        final List<dynamic> items = data['items'];
+        if (items.isEmpty) {
+          log("list is empty");
+          return [];
+        }
+        return items.map((item) => InventoryIssue.fromJson(item)).toList();
+      } else {
+        print('Server Error: ${response.statusCode}, Body: ${response.body}');
+        throw Exception('serverError');
+      }
+    } on SocketException {
+      print('Network Error: No internet connection.');
+      throw Exception('noInternet');
+    } on TimeoutException {
+      print('Network Error: Request timed out.');
+      throw Exception('noInternet');
+    } catch (e) {
+      print('An unexpected error occurred at Inventory issue: $e');
+      throw Exception('serverError');
+    }
+  }
+
+  /// Exit
+  Future<List<InventoryIssue>> getExit({
+    required int userId,
+    required int roleId,
+    required int passwordNumber,
+  }) async {
+    final queryParams = {
+      'user_id': userId.toString(),
+      'password_number': passwordNumber.toString(),
+      'role_id': roleId.toString(),
+    };
+    final url = Uri.parse(
+      '$_baseUrl/GET_ST_ADJUST_TRNS_OUT_AUTH',
+    ).replace(queryParameters: queryParams);
+    print('Fetching Inventory issue Requests from: $url');
+    try {
+      final response = await http.get(url).timeout(const Duration(seconds: 30));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        final List<dynamic> items = data['items'];
+        if (items.isEmpty) {
+          log("list is empty");
+          return [];
+        }
+        return items.map((item) => InventoryIssue.fromJson(item)).toList();
+      } else {
+        print('Server Error: ${response.statusCode}, Body: ${response.body}');
+        throw Exception('serverError');
+      }
+    } on SocketException {
+      print('Network Error: No internet connection.');
+      throw Exception('noInternet');
+    } on TimeoutException {
+      print('Network Error: Request timed out.');
+      throw Exception('noInternet');
+    } catch (e) {
+      print('An unexpected error occurred at Inventory issue: $e');
       throw Exception('serverError');
     }
   }
