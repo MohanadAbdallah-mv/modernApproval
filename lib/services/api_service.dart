@@ -391,7 +391,7 @@ class ApiService {
         ).replace(queryParameters: queryParams);
       case "exit":
         url = Uri.parse(
-          '$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS',
+          '$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS',
         ).replace(queryParameters: queryParams);
       default:
         //todo update this later on
@@ -452,7 +452,7 @@ class ApiService {
       case "mission":
         url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_UPDATE_VCNC_TRNS');
       case "exit":
-        url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_UPDATE_VCNC_TRNS');
+        url = Uri.parse('$_baseUrl/CHECK_LAST_ELVEL_UPDATE_EXIT_TRNS');
       default:
         //todo update this later on
         url = Uri.parse('$_baseUrl/check_last_level_update');
@@ -511,7 +511,7 @@ class ApiService {
       case "mission":
         url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
       case "exit":
-        url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
+        url = Uri.parse('$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS');
       default:
         //todo update this later on
         url = Uri.parse('$_baseUrl/UPDATE_PUR_REQUEST_STATUS');
@@ -558,7 +558,7 @@ class ApiService {
       case "mission":
         url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
       case "exit":
-        url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
+        url = Uri.parse('$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS');
       default:
         //todo update this later on
         url = Uri.parse('$_baseUrl/UPDATE_PUR_REQUEST_STATUS');
@@ -605,7 +605,7 @@ class ApiService {
       case "mission":
         url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
       case "exit":
-        url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
+        url = Uri.parse('$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS');
       default:
         //todo update this later on
         url = Uri.parse('$_baseUrl/UPDATE_PUR_REQUEST_STATUS');
