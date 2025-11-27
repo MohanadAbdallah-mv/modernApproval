@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:modernapproval/models/password_group_model.dart';
 import 'package:modernapproval/screens/approvals/exit_permission_approval/exit_permission_approval.dart';
+import 'package:modernapproval/screens/approvals/general_journal_disbursement_approval/general_journal_disbursement_approval_screen.dart';
 import 'package:modernapproval/screens/approvals/inventory_issue_approval/inventory_issue_approval_screen.dart';
 import 'package:modernapproval/screens/approvals/leave_and_absence_approval/leave_and_absence_approval_screen.dart';
 import 'package:modernapproval/screens/approvals/mission_approval/mission_approval_screen.dart';
@@ -62,6 +63,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
               _fetchAndSetPurchaseOrderCount();
               _fetchAndSetSalesOrderCount();
               _fetchAndSetPurchasePayCount();
+              _fetchAndSetGeneralJournalDisbursementCount();
               _fetchAndSetProductionOutboundCount();
               _fetchAndSetProductionInboundCount();
               _fetchAndSetInventoryIssueCount();
@@ -83,6 +85,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
     await _fetchAndSetPurchaseOrderCount();
     await _fetchAndSetSalesOrderCount();
     await _fetchAndSetPurchasePayCount();
+    await _fetchAndSetGeneralJournalDisbursementCount();
     await _fetchAndSetProductionOutboundCount();
     await _fetchAndSetProductionInboundCount();
     await _fetchAndSetInventoryIssueCount();
@@ -190,6 +193,33 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
     } catch (e) {
       print("Error fetching purchase pay count: $e");
       _approvalCounts[111] = 0;
+    } finally {
+      if (mounted) {
+        setState(() {
+          _isCountLoading = false;
+        });
+      }
+    }
+  }
+
+  Future<void> _fetchAndSetGeneralJournalDisbursementCount() async {
+    if (_selectedPasswordGroup == null) return;
+    if (!mounted) return;
+
+    setState(() {
+      _isCountLoading = true;
+    });
+
+    try {
+      final requests = await _apiService.getGeneralJournalDisbursementApproval(
+        userId: widget.user.usersCode,
+        roleId: widget.user.roleCode!,
+        passwordNumber: _selectedPasswordGroup!.passwordNumber,
+      );
+      _approvalCounts[107] = requests.length;
+    } catch (e) {
+      print("Error fetching purchase pay count: $e");
+      _approvalCounts[107] = 0;
     } finally {
       if (mounted) {
         setState(() {
@@ -536,6 +566,24 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
         if (mounted) {
           _refreshCounts();
         }
+
+      case 107:
+        log("entering General Journal Disbursement approval");
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                (context) => GeneralJournalDisbursementApprovalScreen(
+                  user: widget.user,
+                  selectedPasswordNumber:
+                      _selectedPasswordGroup!.passwordNumber,
+                ),
+          ),
+        );
+        if (mounted) {
+          _refreshCounts();
+        }
+
       case 112:
         log("entering Exit Permission approval");
         await Navigator.push(
@@ -617,6 +665,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                         item.pageId == 102 ||
                         item.pageId == 108 ||
                         item.pageId == 111 ||
+                        item.pageId == 107 ||
                         item.pageId == 105 ||
                         item.pageId == 106 ||
                         item.pageId == 109 ||
@@ -756,6 +805,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
               _fetchAndSetPurchaseOrderCount();
               _fetchAndSetSalesOrderCount();
               _fetchAndSetPurchasePayCount();
+              _fetchAndSetGeneralJournalDisbursementCount();
               _fetchAndSetProductionOutboundCount();
               _fetchAndSetProductionInboundCount();
               _fetchAndSetInventoryIssueCount();

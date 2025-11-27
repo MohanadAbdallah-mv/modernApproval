@@ -318,5 +318,6 @@
   "missionApproval": "اعتماد المأموريات",
   "enter_time": "وقت العودة",
   "ExitPermissionApproval": "اعتماد الاذونات",
-  "permission_details": "تفاصيل الإذن"
+  "permission_details": "تفاصيل الإذن",
+  "general_journal_disbursement_approval": "اعتماد طلب الصرف اليومية العامة"
 }

@@ -317,5 +317,6 @@
   "missionApproval": "Mission Approval",
   "ExitPermissionApproval": "Permission Approval",
   "enter_time": "Enter Time",
-  "permission_details": "Permission Details"
+  "permission_details": "Permission Details",
+  "general_journal_disbursement_approval": "General Journal Disbursement Approval"
 }
