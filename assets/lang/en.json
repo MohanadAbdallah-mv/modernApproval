@@ -309,5 +309,11 @@
   "desc_vacation": "Description",
   "from": "From",
   "to": "To",
-  "trnsDate": "Transaction Date"
+  "trnsDate": "Transaction Date",
+  "mission": "Mission",
+  "type": "Type",
+  "enter_date": "Enter Date",
+  "mission_type": "Mission Type",
+  "missionApproval": "Mission Approval",
+  "enter_time": "Enter Time"
 }
