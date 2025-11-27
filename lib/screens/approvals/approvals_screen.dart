@@ -66,10 +66,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
               _fetchAndSetProductionInboundCount();
               _fetchAndSetInventoryIssueCount();
               _fetchAndSetLeaveAndAbsenceCount();
-              _fetchAndSetMissionCount();
               _fetchAndSetExitPermissionsCount();
               _fetchAndSetMissionApprovalCount();
-
             });
           }
         })
@@ -89,6 +87,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
     await _fetchAndSetProductionInboundCount();
     await _fetchAndSetInventoryIssueCount();
     await _fetchAndSetLeaveAndAbsenceCount();
+    await _fetchAndSetExitPermissionsCount();
+    await _fetchAndSetMissionApprovalCount();
   }
 
   Future<void> _fetchAndSetPurchaseRequestCount() async {
@@ -254,8 +254,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
   }
 
   Future<void> _fetchAndSetInventoryIssueCount() async {
-
-  if (_selectedPasswordGroup == null) return;
+    if (_selectedPasswordGroup == null) return;
     if (!mounted) return;
 
     setState(() {
@@ -263,16 +262,16 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
     });
 
     try {
-final requests = await _apiService.getInventoryIssue(  userId: widget.user.usersCode,
+      final requests = await _apiService.getInventoryIssue(
+        userId: widget.user.usersCode,
         roleId: widget.user.roleCode!,
         passwordNumber: _selectedPasswordGroup!.passwordNumber,
-      
       );
-            _approvalCounts[104] = requests.length;
+      _approvalCounts[104] = requests.length;
     } catch (e) {
       print("Error fetching Inventory issue count: $e");
       _approvalCounts[104] = 0;
- } finally {
+    } finally {
       if (mounted) {
         setState(() {
           _isCountLoading = false;
@@ -280,8 +279,8 @@ final requests = await _apiService.getInventoryIssue(  userId: widget.user.users
       }
     }
   }
-  Future<void> _fetchAndSetLeaveAndAbsenceCount() async {
 
+  Future<void> _fetchAndSetLeaveAndAbsenceCount() async {
     if (_selectedPasswordGroup == null) return;
     if (!mounted) return;
 
@@ -361,6 +360,7 @@ final requests = await _apiService.getInventoryIssue(  userId: widget.user.users
       }
     }
   }
+
   Future<List<FormReportItem>> _fetchAndProcessApprovals() async {
     final items = await _apiService.getFormsAndReports(widget.user.usersCode);
     final approvals = items.where((item) => item.type == 'F').toList();
@@ -538,7 +538,6 @@ final requests = await _apiService.getInventoryIssue(  userId: widget.user.users
         }
       case 112:
         log("entering Exit Permission approval");
-        //todo change this to Exit Permission screen
         await Navigator.push(
           context,
           MaterialPageRoute(
