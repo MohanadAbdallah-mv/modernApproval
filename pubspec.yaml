@@ -65,6 +65,7 @@ dependencies:
   printing: ^5.14.2
   device_preview: ^1.3.1
   number_to_word_arabic: ^0.0.8
+  bot_toast: ^4.1.3
 
 dev_dependencies:
   flutter_test:

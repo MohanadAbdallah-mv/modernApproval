@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:modernapproval/models/approval_status_response_model.dart';
@@ -18,6 +19,8 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 import 'package:flutter/rendering.dart' show TextDirection;
+
+import '../../../services/event_bus.dart';
 
 // ---------------------
 
@@ -909,6 +912,7 @@ class _InventoryIssueDetailScreenState
     final int prevSerOriginal = widget.request.prevSer ?? 0;
 
     try {
+      BotToast.showLoading();
       print("--- 🚀 Starting Approval Process (Status: $actualStatus) ---");
       final ApprovalStatusResponse s1 = await _apiService.stage1_getStatus(
         userId: userId,
@@ -996,8 +1000,11 @@ class _InventoryIssueDetailScreenState
           backgroundColor: Colors.green,
         ),
       );
+      BotToast.closeAllLoading();
+      EventBus.notifyHomeRefresh();
       Navigator.pop(context, true);
     } catch (e) {
+      BotToast.closeAllLoading();
       print("--- ❌ Process Failed ---");
       print("❌ ERROR DETAILS: $e");
       if (!mounted) return;

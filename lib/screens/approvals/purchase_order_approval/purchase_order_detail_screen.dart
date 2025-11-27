@@ -1,3 +1,4 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' hide TextDirection;
@@ -17,6 +18,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
 import '../../../models/approvals/purchase_order/purchase_order_det_model.dart';
+import '../../../services/event_bus.dart';
 
 class PurchaseOrderDetailScreen extends StatefulWidget {
   final UserModel user;
@@ -893,6 +895,7 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
     final int prevSerOriginal = widget.request.prevSer!;
 
     try {
+      BotToast.showLoading();
       print("--- 🚀 Starting Approval Process (Status: $actualStatus) ---");
       //todo update stage 1 here for order
       final ApprovalStatusResponse s1 = await _apiService.stage1_getStatus(
@@ -987,8 +990,11 @@ class _PurchaseOrderDetailScreenState extends State<PurchaseOrderDetailScreen> {
           backgroundColor: Colors.green,
         ),
       );
+      BotToast.closeAllLoading();
+      EventBus.notifyHomeRefresh();
       Navigator.pop(context, true);
     } catch (e) {
+      BotToast.closeAllLoading();
       print("--- ❌ Process Failed ---");
       print("❌ ERROR DETAILS: $e");
       if (!mounted) return;

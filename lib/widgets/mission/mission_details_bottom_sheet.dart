@@ -1,10 +1,13 @@
+import 'package:bot_toast/bot_toast.dart';
 import 'package:flutter/material.dart';
 import 'package:modernapproval/models/approvals/mission_approval_model/mission_approval_model/mission_approval_item.dart';
 import 'package:modernapproval/services/api_service.dart';
 import '../../app_localizations.dart';
 import '../../models/approvals/leave_and_absence/leave_absence_model.dart';
 import '../../models/user_model.dart';
-import 'package:modernapproval/models/approval_status_response_model.dart'; // <-- إضافة
+import 'package:modernapproval/models/approval_status_response_model.dart';
+
+import '../../services/event_bus.dart'; // <-- إضافة
 
 class MissionDetailsBottomSheet extends StatefulWidget {
   final MissionApprovalItem request;
@@ -746,6 +749,7 @@ class _MissionDetailsBottomSheetState extends State<MissionDetailsBottomSheet> {
     final int prevSerOriginal = widget.request.prevSer!.toInt();
 
     try {
+      BotToast.showLoading();
       print("--- 🚀 Starting Approval Process (Status: $actualStatus) ---");
       final ApprovalStatusResponse s1 = await widget.apiService
           .stage1_getStatus(
@@ -841,8 +845,11 @@ class _MissionDetailsBottomSheetState extends State<MissionDetailsBottomSheet> {
       if (widget.onDataChanged != null) {
         widget.onDataChanged!();
       }
+      BotToast.closeAllLoading();
+      EventBus.notifyHomeRefresh();
       Navigator.pop(context, true);
     } catch (e) {
+      BotToast.closeAllLoading();
       print("--- ❌ Process Failed ---");
       print("❌ ERROR DETAILS: $e");
       if (!mounted) return;
