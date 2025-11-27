@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:modernapproval/models/password_group_model.dart';
+import 'package:modernapproval/screens/approvals/exit_permission_approval/exit_permission_approval.dart';
 import 'package:modernapproval/screens/approvals/inventory_issue_approval/inventory_issue_approval_screen.dart';
 import 'package:modernapproval/screens/approvals/leave_and_absence_approval/leave_and_absence_approval_screen.dart';
 import 'package:modernapproval/screens/approvals/production_inbound_approval/production_inbound_approval_screen.dart';
@@ -65,7 +66,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
               _fetchAndSetInventoryIssueCount();
               _fetchAndSetLeaveAndAbsenceCount();
               _fetchAndSetMissionCount();
-              _fetchAndSetExitCount();
+              _fetchAndSetExitPermissionsCount();
             });
           }
         })
@@ -86,7 +87,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
     await _fetchAndSetInventoryIssueCount();
     await _fetchAndSetLeaveAndAbsenceCount();
     await _fetchAndSetMissionCount();
-    await _fetchAndSetExitCount();
+    await _fetchAndSetExitPermissionsCount();
   }
 
   Future<void> _fetchAndSetPurchaseRequestCount() async {
@@ -334,7 +335,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
   }
 
   //todo change this to exit
-  Future<void> _fetchAndSetExitCount() async {
+  Future<void> _fetchAndSetExitPermissionsCount() async {
     if (_selectedPasswordGroup == null) return;
     if (!mounted) return;
 
@@ -343,15 +344,15 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
     });
 
     try {
-      final requests = await _apiService.getLeaveAndAbsence(
+      final requests = await _apiService.getExitPermissions(
         userId: widget.user.usersCode,
         roleId: widget.user.roleCode!,
         passwordNumber: _selectedPasswordGroup!.passwordNumber,
       );
-      _approvalCounts[109] = requests.length;
+      _approvalCounts[112] = requests.length;
     } catch (e) {
-      print("Error fetching Leave and Absence count: $e");
-      _approvalCounts[109] = 0;
+      print("Error fetching Exit Permissions count: $e");
+      _approvalCounts[112] = 0;
     } finally {
       if (mounted) {
         setState(() {
@@ -520,6 +521,23 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
         if (mounted) {
           _refreshCounts();
         }
+      case 112:
+        log("entering Exit Permission approval");
+        //todo change this to Exit Permission screen
+        await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder:
+                (context) => ExitPermissionApproval(
+                  user: widget.user,
+                  selectedPasswordNumber:
+                      _selectedPasswordGroup!.passwordNumber,
+                ),
+          ),
+        );
+        if (mounted) {
+          _refreshCounts();
+        }
       default:
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Work in progress for: ${item.pageNameE}')),
@@ -588,6 +606,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
                         item.pageId == 105 ||
                         item.pageId == 106 ||
                         item.pageId == 109 ||
+                        item.pageId == 112 ||
                         item.pageId == 104) &&
                     _isCountLoading,
               );
@@ -727,7 +746,7 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
               _fetchAndSetInventoryIssueCount();
               _fetchAndSetLeaveAndAbsenceCount();
               _fetchAndSetMissionCount();
-              _fetchAndSetExitCount();
+              _fetchAndSetExitPermissionsCount();
             });
           },
           offset: const Offset(0, 48),
@@ -830,6 +849,8 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
         return Icons.badge_outlined;
       case 111:
         return Icons.payments_outlined;
+      case 112:
+        return Icons.document_scanner;
       default:
         return Icons.description_outlined;
     }
@@ -891,6 +912,11 @@ class _ApprovalsScreenState extends State<ApprovalsScreen> {
         return {
           'background': const Color(0xFFF0F4C3),
           'icon': const Color(0xFF9E9D24),
+        };
+      case 112:
+        return {
+          'background': const Color(0xFFFCE4EC),
+          'icon': const Color(0xFFD32F2F),
         };
       default:
         return {

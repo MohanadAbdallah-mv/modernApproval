@@ -212,7 +212,6 @@
   "permission_type": "Permission Type",
   "exit_date_time": "Exit Date & Time",
   "return_date_time": "Return Date & Time",
-  "exit_date": "Exit Date",
   "exit_reason": "Exit Reason",
   "no_reason_provided": "No reason was provided",
   "no_requests_found_after_filter": "No results match the filter",
@@ -309,5 +308,10 @@
   "desc_vacation": "Description",
   "from": "From",
   "to": "To",
-  "trnsDate": "Transaction Date"
+  "trnsDate": "Transaction Date",
+  "ExitPermissionApproval": "Permission Approval",
+  "enter_time": "Enter Time",
+  "enter_date": "Enter Date",
+  "exit_date": "Exit Date",
+  "permission_details": "Permission Details"
 }

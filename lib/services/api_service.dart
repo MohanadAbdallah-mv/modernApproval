@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:modernapproval/models/approval_status_response_model.dart'; // <-- إضافة
+import 'package:modernapproval/models/approvals/exit_permission/exit_permission_model.dart';
 import 'package:modernapproval/models/approvals/inventory_issue/inventory_issue_details_model/inventory_issue_details_item.dart';
 import 'package:modernapproval/models/approvals/inventory_issue/inventory_issue_master_model/inventory_issue_master_item.dart';
 import 'package:modernapproval/models/approvals/inventory_issue/inventory_issue_model/inventory_issue.dart';
@@ -390,7 +391,7 @@ class ApiService {
         ).replace(queryParameters: queryParams);
       case "exit":
         url = Uri.parse(
-          '$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS',
+          '$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS',
         ).replace(queryParameters: queryParams);
       default:
         //todo update this later on
@@ -451,7 +452,7 @@ class ApiService {
       case "mission":
         url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_UPDATE_VCNC_TRNS');
       case "exit":
-        url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_UPDATE_VCNC_TRNS');
+        url = Uri.parse('$_baseUrl/CHECK_LAST_ELVEL_UPDATE_EXIT_TRNS');
       default:
         //todo update this later on
         url = Uri.parse('$_baseUrl/check_last_level_update');
@@ -510,7 +511,7 @@ class ApiService {
       case "mission":
         url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
       case "exit":
-        url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
+        url = Uri.parse('$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS');
       default:
         //todo update this later on
         url = Uri.parse('$_baseUrl/UPDATE_PUR_REQUEST_STATUS');
@@ -557,7 +558,7 @@ class ApiService {
       case "mission":
         url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
       case "exit":
-        url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
+        url = Uri.parse('$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS');
       default:
         //todo update this later on
         url = Uri.parse('$_baseUrl/UPDATE_PUR_REQUEST_STATUS');
@@ -604,7 +605,7 @@ class ApiService {
       case "mission":
         url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
       case "exit":
-        url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
+        url = Uri.parse('$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS');
       default:
         //todo update this later on
         url = Uri.parse('$_baseUrl/UPDATE_PUR_REQUEST_STATUS');
@@ -1441,8 +1442,8 @@ class ApiService {
     }
   }
 
-  /// Exit
-  Future<List<InventoryIssue>> getExit({
+  /// Exit Permissions
+  Future<List<ExitPermission>> getExitPermissions({
     required int userId,
     required int roleId,
     required int passwordNumber,
@@ -1453,9 +1454,9 @@ class ApiService {
       'role_id': roleId.toString(),
     };
     final url = Uri.parse(
-      '$_baseUrl/GET_ST_ADJUST_TRNS_OUT_AUTH',
+      '$_baseUrl/GET_PY_EXIT_TRNS_AUTH',
     ).replace(queryParameters: queryParams);
-    print('Fetching Inventory issue Requests from: $url');
+    print('Fetching Exit Permissions from: $url');
     try {
       final response = await http.get(url).timeout(const Duration(seconds: 30));
       if (response.statusCode == 200) {
@@ -1466,7 +1467,7 @@ class ApiService {
           log("list is empty");
           return [];
         }
-        return items.map((item) => InventoryIssue.fromJson(item)).toList();
+        return items.map((item) => ExitPermission.fromJson(item)).toList();
       } else {
         print('Server Error: ${response.statusCode}, Body: ${response.body}');
         throw Exception('serverError');
@@ -1478,7 +1479,7 @@ class ApiService {
       print('Network Error: Request timed out.');
       throw Exception('noInternet');
     } catch (e) {
-      print('An unexpected error occurred at Inventory issue: $e');
+      print('An unexpected error occurred at Exit Permission: $e');
       throw Exception('serverError');
     }
   }

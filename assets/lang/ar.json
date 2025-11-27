@@ -310,5 +310,9 @@
   "desc_vacation": "وصف الاجازة",
   "from": "من",
   "to": "الي",
-  "trnsDate": "تاريخ الحركة"
+  "trnsDate": "تاريخ الحركة",
+  "ExitPermissionApproval": "اعتماد الاذونات",
+  "enter_time": "وقت الدخول",
+  "enter_date": "تاريخ الدخول",
+  "permission_details": "تفاصيل الإذن"
 }
