@@ -318,5 +318,9 @@
   "ExitPermissionApproval": "Permission Approval",
   "enter_time": "Enter Time",
   "permission_details": "Permission Details",
-  "IncomingCostApproval": "Incoming Cost Approval"
+  "IncomingCostApproval": "Incoming Cost Approval",
+  "order_trns": "Order No",
+  "purchase_trns": "Purchase No",
+  "unit_cost_local": "Unit Cost Local",
+  "total_local": "Total Cost Local"
 }

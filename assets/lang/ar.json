@@ -319,5 +319,9 @@
   "enter_time": "وقت العودة",
   "ExitPermissionApproval": "اعتماد الاذونات",
   "permission_details": "تفاصيل الإذن",
-  "IncomingCostApproval": "اعتماد واردة تكاليف"
+  "IncomingCostApproval": "اعتماد واردة تكاليف",
+  "order_trns": "أمر التوريد",
+  "purchase_trns": "فاتورة مشتريات",
+  "unit_cost_local": "سعر الوحدة محلي",
+  "total_local": "الاجمالي محلي"
 }
