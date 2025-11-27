@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:modernapproval/models/approvals/general_journal_disbursement_approval/general_journal_desbursement_approval_model/general_journal_desbursement_approval_item.dart';
-import 'package:modernapproval/models/approvals/purchase_pay/purchase_pay_model.dart';
 import 'package:modernapproval/screens/approvals/general_journal_disbursement_approval/general_journal_disbursement_detail_screen.dart';
-import 'package:modernapproval/screens/approvals/purchase_pay_approval/purchase_pay_detail_screen.dart';
 import '../../../app_localizations.dart';
 import '../../../models/user_model.dart';
 import '../../../services/api_service.dart';
@@ -283,7 +281,7 @@ class _GeneralJournalDisbursementApprovalScreenState
     final l = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: CustomAppBar(
-        title: l.translate('GeneralJournalDesbursementApprovalItem'),
+        title: l.translate('GeneralJournalDesbursementApproval'),
         filterWidget: _buildFilterWidget(),
       ),
       backgroundColor: const Color(0xFFF5F7FA),

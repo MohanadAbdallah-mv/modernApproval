@@ -323,5 +323,6 @@
   "unit_cost_local": "Unit Cost Local",
   "total_local": "Total Cost Local",
   "permission_details": "Permission Details",
-  "general_journal_disbursement_approval": "General Journal Disbursement Approval"
+  "general_journal_disbursement_approval": "General Journal Disbursement Approval",
+  "GeneralJournalDesbursementApproval": "General Journal Disbursement"
 }

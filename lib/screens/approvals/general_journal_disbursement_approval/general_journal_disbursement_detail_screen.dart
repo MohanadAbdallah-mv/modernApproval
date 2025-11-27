@@ -1,11 +1,7 @@
-import 'dart:developer';
-
+import 'package:bot_toast/bot_toast.dart';
 import 'package:modernapproval/models/approvals/general_journal_disbursement_approval/general_journal_desbursement_approval_model/general_journal_desbursement_approval_item.dart';
 import 'package:modernapproval/models/approvals/general_journal_disbursement_approval/general_journal_disbursement_details_model/general_journal_disbursement_details_item.dart';
 import 'package:modernapproval/models/approvals/general_journal_disbursement_approval/general_journal_disbursement_master_model/general_journal_disbursement_master_item.dart';
-import 'package:modernapproval/models/approvals/purchase_pay/purchase_pay_det_model.dart';
-import 'package:modernapproval/models/approvals/purchase_pay/purchase_pay_mast_model.dart';
-import 'package:modernapproval/models/approvals/purchase_pay/purchase_pay_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart' hide TextDirection;
@@ -13,7 +9,6 @@ import 'package:modernapproval/models/approval_status_response_model.dart';
 import 'package:modernapproval/models/user_model.dart';
 import 'package:modernapproval/services/api_service.dart';
 import 'package:modernapproval/widgets/error_display.dart';
-import 'package:number_to_word_arabic/number_to_word_arabic.dart';
 import '../../../app_localizations.dart';
 import '../../../main.dart';
 
@@ -21,6 +16,8 @@ import '../../../main.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+
+import '../../../services/event_bus.dart';
 
 // ---------------------
 
@@ -67,12 +64,10 @@ class _GeneralJournalDisbursementDetailsScreenState
           trnsSerial: widget.request.reqSerial ?? 0,
         ),
       ]);
-      log("message1");
       setState(() {
         _masterData = results[0] as GeneralJournalDisbursementMasterItem;
         _detailData = results[1] as List<GeneralJournalDisbursementDetailsItem>;
       });
-      log("message");
       return {'master': _masterData, 'detail': _detailData};
     } catch (e) {
       rethrow;
@@ -1038,6 +1033,7 @@ class _GeneralJournalDisbursementDetailsScreenState
     final int prevSerOriginal = widget.request.prevSer!;
 
     try {
+      BotToast.showLoading();
       print("--- 🚀 Starting Approval Process (Status: $actualStatus) ---");
       final ApprovalStatusResponse s1 = await _apiService.stage1_getStatus(
         userId: userId,
@@ -1130,8 +1126,11 @@ class _GeneralJournalDisbursementDetailsScreenState
           backgroundColor: Colors.green,
         ),
       );
+      BotToast.closeAllLoading();
+      EventBus.notifyHomeRefresh();
       Navigator.pop(context, true);
     } catch (e) {
+      BotToast.closeAllLoading();
       print("--- ❌ Process Failed ---");
       print("❌ ERROR DETAILS: $e");
       if (!mounted) return;
