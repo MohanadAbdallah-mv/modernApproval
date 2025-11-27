@@ -15,7 +15,7 @@ class IncomingCost {
   String? storeName;
   num? fileSerial;
   num? prevSer;
-  String? usersCode;
+  num? usersCode;
   num? roleCode;
   String? authPk1;
   String? authPk2;
