@@ -317,10 +317,11 @@
   "missionApproval": "Mission Approval",
   "ExitPermissionApproval": "Permission Approval",
   "enter_time": "Enter Time",
-  "permission_details": "Permission Details",
   "IncomingCostApproval": "Incoming Cost Approval",
   "order_trns": "Order No",
   "purchase_trns": "Purchase No",
   "unit_cost_local": "Unit Cost Local",
-  "total_local": "Total Cost Local"
+  "total_local": "Total Cost Local",
+  "permission_details": "Permission Details",
+  "general_journal_disbursement_approval": "General Journal Disbursement Approval"
 }

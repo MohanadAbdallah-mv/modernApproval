@@ -8,6 +8,9 @@ import 'package:modernapproval/models/approvals/exit_permission/exit_permission_
 import 'package:modernapproval/models/approvals/incoming_cost/incoming_cost_det_model.dart';
 import 'package:modernapproval/models/approvals/incoming_cost/incoming_cost_master_model.dart';
 import 'package:modernapproval/models/approvals/incoming_cost/incoming_cost_model.dart';
+import 'package:modernapproval/models/approvals/general_journal_disbursement_approval/general_journal_desbursement_approval_model/general_journal_desbursement_approval_item.dart';
+import 'package:modernapproval/models/approvals/general_journal_disbursement_approval/general_journal_disbursement_details_model/general_journal_disbursement_details_item.dart';
+import 'package:modernapproval/models/approvals/general_journal_disbursement_approval/general_journal_disbursement_master_model/general_journal_disbursement_master_item.dart';
 import 'package:modernapproval/models/approvals/inventory_issue/inventory_issue_details_model/inventory_issue_details_item.dart';
 import 'package:modernapproval/models/approvals/inventory_issue/inventory_issue_master_model/inventory_issue_master_item.dart';
 import 'package:modernapproval/models/approvals/inventory_issue/inventory_issue_model/inventory_issue.dart';
@@ -337,7 +340,6 @@ class ApiService {
     String? authPk3,
   }) async {
     var queryParams;
-    //todo add income cost to all stages
     if (authPk3 == null) {
       queryParams = {
         'user_id': userId.toString(),
@@ -402,6 +404,10 @@ class ApiService {
         url = Uri.parse(
           '$_baseUrl/UPDATE_ST_PR_INCOME_LOT_STATUS',
         ).replace(queryParameters: queryParams);
+      case "gen_j_disbursement":
+        url = Uri.parse(
+          '$_baseUrl/UPDATE_AC_TAKE_REQ_STATUS',
+        ).replace(queryParameters: queryParams);
       default:
         //todo update this later on
         url = Uri.parse(
@@ -462,6 +468,8 @@ class ApiService {
         url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_UPDATE_MISSION_TRNS');
       case "exit":
         url = Uri.parse('$_baseUrl/CHECK_LAST_ELVEL_UPDATE_EXIT_TRNS');
+      case "gen_j_disbursement":
+        url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_AC_PAY_TAKE_REQ');
       case "Income_cost":
         url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_ST_PR_INCOME_LOT');
       default:
@@ -525,6 +533,9 @@ class ApiService {
         url = Uri.parse('$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS');
       case "Income_cost":
         url = Uri.parse('$_baseUrl/UPDATE_ST_PR_INCOME_LOT_STATUS');
+      case "gen_j_disbursement":
+        url = Uri.parse('$_baseUrl/UPDATE_AC_TAKE_REQ_STATUS');
+
       default:
         //todo update this later on
         url = Uri.parse('$_baseUrl/UPDATE_PUR_REQUEST_STATUS');
@@ -572,6 +583,8 @@ class ApiService {
         url = Uri.parse('$_baseUrl/UPDATE_PY_MISSION_TRNS_STATUS');
       case "exit":
         url = Uri.parse('$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS');
+      case "gen_j_disbursement":
+        url = Uri.parse('$_baseUrl/UPDATE_AC_TAKE_REQ_STATUS');
       case "Income_cost":
         url = Uri.parse('$_baseUrl/UPDATE_ST_PR_INCOME_LOT_STATUS');
       default:
@@ -623,6 +636,8 @@ class ApiService {
         url = Uri.parse('$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS');
       case "Income_cost":
         url = Uri.parse('$_baseUrl/UPDATE_ST_PR_INCOME_LOT_STATUS');
+      case "gen_j_disbursement":
+        url = Uri.parse('$_baseUrl/UPDATE_AC_TAKE_REQ_STATUS');
       default:
         //todo update this later on
         url = Uri.parse('$_baseUrl/UPDATE_PUR_REQUEST_STATUS');
@@ -1503,7 +1518,7 @@ class ApiService {
     }
   }
 
-  /// Production Outbound
+  /// Incoming Cost
   Future<List<IncomingCost>> getIncomingCost({
     required int userId,
     required int roleId,
@@ -1615,6 +1630,137 @@ class ApiService {
       throw Exception('noInternet');
     } catch (e) {
       print('An unexpected error occurred at Incoming Cost detail: $e');
+      throw Exception('serverError');
+    }
+  }
+
+  /// General Journal Disbursement
+
+  Future<List<GeneralJournalDesbursementApprovalItem>>
+  getGeneralJournalDisbursementApproval({
+    required int userId,
+    required int roleId,
+    required int passwordNumber,
+  }) async {
+    final queryParams = {
+      'user_id': userId.toString(),
+      'password_number': passwordNumber.toString(),
+      'role_id': roleId.toString(),
+    };
+    final url = Uri.parse(
+      '$_baseUrl/GET_AC_PAY_TAKE_REQ_AUTH',
+    ).replace(queryParameters: queryParams);
+    print('Fetching General Journal Disbursement Requests from: $url');
+    try {
+      final response = await http.get(url).timeout(const Duration(seconds: 30));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        final List<dynamic> items = data['items'];
+        if (items.isEmpty) {
+          log("list is empty");
+          return [];
+        }
+        return items
+            .map(
+              (item) => GeneralJournalDesbursementApprovalItem.fromJson(item),
+            )
+            .toList();
+      } else {
+        print('Server Error: ${response.statusCode}, Body: ${response.body}');
+        throw Exception('serverError');
+      }
+    } on SocketException {
+      print('Network Error: No internet connection.');
+      throw Exception('noInternet');
+    } on TimeoutException {
+      print('Network Error: Request timed out.');
+      throw Exception('noInternet');
+    } catch (e) {
+      print('An unexpected error occurred at General Journal Disbursement: $e');
+      throw Exception('serverError');
+    }
+  }
+
+  Future<GeneralJournalDisbursementMasterItem>
+  getGeneralJournalDisbursementApprovalMaster({
+    required int trnsTypeCode,
+    required int trnsSerial,
+  }) async {
+    final queryParams = {
+      'trns_type_code': trnsTypeCode.toString(),
+      'trns_serial': trnsSerial.toString(),
+    };
+    final url = Uri.parse(
+      '$_baseUrl/GET_AC_PAY_TAK_REQ_MAST',
+    ).replace(queryParameters: queryParams);
+    print('Fetching General Journal Disbursement master from: $url');
+    try {
+      final response = await http.get(url).timeout(const Duration(seconds: 20));
+      if (response.statusCode == 200) {
+        log("status code = 200");
+        final data = json.decode(response.body);
+        final List<dynamic> items = data['items'];
+        if (items.isEmpty) {
+          throw Exception('noData');
+        }
+        log('master items: ${items.toString()}');
+        return GeneralJournalDisbursementMasterItem.fromJson(items.first);
+      } else {
+        print('Server Error: ${response.statusCode}, Body: ${response.body}');
+        throw Exception('serverError');
+      }
+    } on SocketException {
+      print('Network Error: No internet connection.');
+      throw Exception('noInternet');
+    } on TimeoutException {
+      print('Network Error: Request timed out.');
+      throw Exception('noInternet');
+    } catch (e) {
+      print(
+        'An unexpected error occurred get General Journal Disbursement master: $e',
+      );
+      throw Exception('serverError');
+    }
+  }
+
+  Future<List<GeneralJournalDisbursementDetailsItem>>
+  getGeneralJournalDisbursementApprovalDetail({
+    required int trnsTypeCode,
+    required int trnsSerial,
+  }) async {
+    final queryParams = {
+      'trns_type_code': trnsTypeCode.toString(),
+      'trns_serial': trnsSerial.toString(),
+    };
+    final url = Uri.parse(
+      '$_baseUrl/GET_AC_PAY_TAKE_REQ_DET',
+    ).replace(queryParameters: queryParams);
+    print('Fetching General Journal Disbursement details from: $url');
+    try {
+      final response = await http.get(url).timeout(const Duration(seconds: 30));
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        final List<dynamic> items = data['items'];
+        log(items.toString());
+        if (items.isEmpty) return [];
+        return items
+            .map((item) => GeneralJournalDisbursementDetailsItem.fromJson(item))
+            .toList();
+      } else {
+        print('Server Error: ${response.statusCode}, Body: ${response.body}');
+        throw Exception('serverError');
+      }
+    } on SocketException {
+      print('Network Error: No internet connection.');
+      throw Exception('noInternet');
+    } on TimeoutException {
+      print('Network Error: Request timed out.');
+      throw Exception('noInternet');
+    } catch (e) {
+      print(
+        'An unexpected error occurred get General Journal Disbursement detail: $e',
+      );
       throw Exception('serverError');
     }
   }

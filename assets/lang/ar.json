@@ -323,5 +323,6 @@
   "order_trns": "أمر التوريد",
   "purchase_trns": "فاتورة مشتريات",
   "unit_cost_local": "سعر الوحدة محلي",
-  "total_local": "الاجمالي محلي"
+  "total_local": "الاجمالي محلي",
+  "general_journal_disbursement_approval": "اعتماد طلب الصرف اليومية العامة"
 }
