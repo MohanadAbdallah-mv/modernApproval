@@ -11,6 +11,7 @@ import 'package:modernapproval/screens/reports/reports_screen.dart';
 import 'package:modernapproval/services/api_service.dart';
 import '../../models/user_model.dart';
 import '../../app_localizations.dart';
+import '../../services/event_bus.dart';
 import '../../widgets/home_app_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -45,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     _setupAnimations();
-
+    EventBus.addListener(_loadData);
     _loadData();
   }
 
@@ -121,6 +122,7 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
   void dispose() {
     _animationController.dispose();
     _pulseController.dispose();
+    EventBus.removeListener(_loadData);
     super.dispose();
   }
 
