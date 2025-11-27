@@ -311,8 +311,12 @@
   "from": "من",
   "to": "الي",
   "trnsDate": "تاريخ الحركة",
+  "mission": "مأمورية",
+  "type": "النوع",
+  "enter_date": "تاريخ العودة",
+  "mission_type": "نوع التصريح",
+  "missionApproval": "اعتماد المأموريات",
+  "enter_time": "وقت العودة",
   "ExitPermissionApproval": "اعتماد الاذونات",
-  "enter_time": "وقت الدخول",
-  "enter_date": "تاريخ الدخول",
   "permission_details": "تفاصيل الإذن"
 }

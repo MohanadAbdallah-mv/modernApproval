@@ -9,6 +9,7 @@ import 'package:modernapproval/models/approvals/inventory_issue/inventory_issue_
 import 'package:modernapproval/models/approvals/inventory_issue/inventory_issue_master_model/inventory_issue_master_item.dart';
 import 'package:modernapproval/models/approvals/inventory_issue/inventory_issue_model/inventory_issue.dart';
 import 'package:modernapproval/models/approvals/leave_and_absence/leave_absence_model.dart';
+import 'package:modernapproval/models/approvals/mission_approval_model/mission_approval_model/mission_approval_item.dart';
 import 'package:modernapproval/models/approvals/production_inbound/production_inbound_details_model/details_item.dart';
 import 'package:modernapproval/models/approvals/production_inbound/production_inbound_master_model/master_item.dart';
 import 'package:modernapproval/models/approvals/production_inbound/production_inbound_model/item.dart';
@@ -387,7 +388,7 @@ class ApiService {
         ).replace(queryParameters: queryParams);
       case "mission":
         url = Uri.parse(
-          '$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS',
+          '$_baseUrl/UPDATE_PY_MISSION_TRNS_STATUS',
         ).replace(queryParameters: queryParams);
       case "exit":
         url = Uri.parse(
@@ -450,7 +451,7 @@ class ApiService {
       case "lev_abs":
         url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_UPDATE_VCNC_TRNS');
       case "mission":
-        url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_UPDATE_VCNC_TRNS');
+        url = Uri.parse('$_baseUrl/CHECK_LAST_LEVEL_UPDATE_MISSION_TRNS');
       case "exit":
         url = Uri.parse('$_baseUrl/CHECK_LAST_ELVEL_UPDATE_EXIT_TRNS');
       default:
@@ -509,7 +510,7 @@ class ApiService {
       case "lev_abs":
         url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
       case "mission":
-        url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
+        url = Uri.parse('$_baseUrl/UPDATE_PY_MISSION_TRNS_STATUS');
       case "exit":
         url = Uri.parse('$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS');
       default:
@@ -556,7 +557,7 @@ class ApiService {
       case "lev_abs":
         url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
       case "mission":
-        url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
+        url = Uri.parse('$_baseUrl/UPDATE_PY_MISSION_TRNS_STATUS');
       case "exit":
         url = Uri.parse('$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS');
       default:
@@ -603,7 +604,7 @@ class ApiService {
       case "lev_abs":
         url = Uri.parse('$_baseUrl/UPDATE_PY_VCNC_TRNS_STATUS');
       case "mission":
-        url = Uri.parse('$_baseUrl/UPDATE_ST_ADJUST_TRNS_OUT_STATUS');
+        url = Uri.parse('$_baseUrl/UPDATE_PY_MISSION_TRNS_STATUS');
       case "exit":
         url = Uri.parse('$_baseUrl/UPDATE_PY_EXIT_TRNS_STATUS');
       default:
@@ -1401,7 +1402,7 @@ class ApiService {
   }
 
   /// mission
-  Future<List<InventoryIssue>> getMission({
+  Future<List<MissionApprovalItem>> getMission({
     required int userId,
     required int roleId,
     required int passwordNumber,
@@ -1412,11 +1413,13 @@ class ApiService {
       'role_id': roleId.toString(),
     };
     final url = Uri.parse(
-      '$_baseUrl/GET_ST_ADJUST_TRNS_OUT_AUTH',
+      '$_baseUrl/GET_PY_MISSION_TRNS_AUTH',
     ).replace(queryParameters: queryParams);
-    print('Fetching Inventory issue Requests from: $url');
+    print('Fetching mission requests from: $url');
     try {
-      final response = await http.get(url).timeout(const Duration(seconds: 30));
+      final response = await http
+          .get(url)
+          .timeout(const Duration(seconds: 120));
       if (response.statusCode == 200) {
         final data = json.decode(response.body);
 
@@ -1425,7 +1428,7 @@ class ApiService {
           log("list is empty");
           return [];
         }
-        return items.map((item) => InventoryIssue.fromJson(item)).toList();
+        return items.map((item) => MissionApprovalItem.fromJson(item)).toList();
       } else {
         print('Server Error: ${response.statusCode}, Body: ${response.body}');
         throw Exception('serverError');
@@ -1437,7 +1440,7 @@ class ApiService {
       print('Network Error: Request timed out.');
       throw Exception('noInternet');
     } catch (e) {
-      print('An unexpected error occurred at Inventory issue: $e');
+      print('An unexpected error occurred at mission: $e');
       throw Exception('serverError');
     }
   }
