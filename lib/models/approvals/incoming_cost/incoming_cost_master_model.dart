@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 import '../../../utils/package_utility.dart';
 
 class IncomingCostMaster {
@@ -101,11 +103,29 @@ class IncomingCostMaster {
     return formatDate(insertDate);
   }
 
+  String get formattedInsertDateWithTime {
+    if (insertDate == null) return '';
+
+    final timeFormat = DateFormat('HH:mm');
+    final dateFormat = DateFormat('yyyy-MM-dd');
+
+    return '${timeFormat.format(insertDate!)}  ${dateFormat.format(insertDate!)}';
+  }
+
   String get formattedAuth1Date {
     return formatDate(auth1Date);
   }
 
   String get formattedAuth2Date {
     return formatDate(auth2Date);
+  }
+
+  String get formattedAuth2DateWithTime {
+    if (auth2Date == null) return '';
+
+    final timeFormat = DateFormat('HH:mm');
+    final dateFormat = DateFormat('yyyy-MM-dd');
+
+    return '${timeFormat.format(auth2Date!)}  ${dateFormat.format(auth2Date!)}';
   }
 }

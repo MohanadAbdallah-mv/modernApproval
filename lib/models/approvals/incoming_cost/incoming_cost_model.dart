@@ -1,8 +1,8 @@
 import '../../../utils/package_utility.dart';
 
 class IncomingCost {
-  num? trnsTypeCode;
-  num? trnsSerial;
+  final int trnsTypeCode;
+  final int trnsSerial;
   DateTime? reqDate;
   String? supplierName;
   String? descTrns;
@@ -14,18 +14,18 @@ class IncomingCost {
   String? descE;
   String? storeName;
   num? fileSerial;
-  num? prevSer;
+  int? prevSer;
   num? usersCode;
   num? roleCode;
   String? authPk1;
   String? authPk2;
-  num? lastLevel;
+  int? lastLevel;
   dynamic trnsFlag;
   dynamic trnsStatus;
 
   IncomingCost({
-    this.trnsTypeCode,
-    this.trnsSerial,
+    required this.trnsTypeCode,
+    required this.trnsSerial,
     this.reqDate,
     this.supplierName,
     this.descTrns,
